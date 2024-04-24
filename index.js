@@ -1,57 +1,80 @@
-// Header
-const header = document.createElement("h1");
-header.innerHTML = "Freelancer Forum";
-header.style.textAlign = "center";
-header.style.fontSize = "64px";
-document.body.appendChild(header);
+const wrapperEle = document.getElementById("wrapper");
 
-// Prices
-const prices = document.createElement("p");
-prices.innerHTML = "The average starting price is $30";
-prices.style.textAlign = "center";
-prices.style.fontSize = "32px";
-document.body.appendChild(prices);
+const freelancers = [];
+function generateFreelancer(num) {
+  const names = ["luke", "selene", "kratos", "sly", "aloy", "krennic", "jyn"];
+  const occupations = [
+    "teacher",
+    "programmer",
+    "thief",
+    "cute dog",
+    "hunter",
+    "racer",
+    "writer",
+  ];
+  const startingPrices = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
-// Available Freelancers section
-
-const available = document.createElement("h2");
-available.innerHTML = "Available Freelancers";
-available.style.textAlign = "center";
-available.style.fontSize = "44px";
-document.body.appendChild(available);
-
-// Name, Occupation, Starting price
-
-const box = document.createElement("div");
-box.style.display = "flex";
-box.style.justifyContent = "space-evenly";
-const boxName = document.createElement("h2");
-boxName.innerHTML = "Name";
-const boxOcc = document.createElement("h2");
-boxOcc.innerHTML = "Occupation";
-const boxPrice = document.createElement("h2");
-boxPrice.innerHTML = "Starting Price";
-box.appendChild(boxName);
-box.appendChild(boxOcc);
-box.appendChild(boxPrice);
-document.body.appendChild(box);
-
-// Column lists
-
-const freelancers = [
-  { name: "Dr. Slice", price: 25, occupation: "gardener" },
-  { name: "Dr. Pressure", price: 51, occupation: "programmer" },
-  { name: "Prof. Possibility", price: 43, occupation: "teacher" },
-  { name: "Prof. Prism", price: 81, occupation: "teacher" },
-  { name: "Dr. Impulse", price: 43, occupation: "teacher" },
-  { name: "Prof. Spark", price: 76, occupation: "programmer" },
-  { name: "Dr. Wire", price: 47, occupation: "teacher" },
-  { name: "Prof. Goose", price: 72, occupation: "driver" },
-];
-
-function getNames() {
-  const nam = freelancers.map((i) => {
-    return i.name;
-  });
-  return nam;
+  for (let i = 0; i < num; i++) {
+    const fl = { name: "", occupation: "", startingPrice: 0 };
+    fl.name = names[Math.floor(Math.random() * names.length)];
+    fl.occupation = occupations[Math.floor(Math.random() * occupations.length)];
+    fl.startingPrice =
+      startingPrices[Math.floor(Math.random() * startingPrices.length)];
+    freelancers.push(fl);
+  }
 }
+
+generateFreelancer(10);
+
+const titleEle = document.createElement("h1");
+titleEle.innerHTML = "Freelancer Forum";
+wrapperEle.appendChild(titleEle);
+
+function avgPrices(fl) {
+  const averagePricesEle = document.createElement("p");
+  const average =
+    fl.reduce((acc, cv) => acc + cv.startingPrice, 0) / freelancers.length;
+  console.log(average);
+  averagePricesEle.innerHTML = `The average starting price is $${average}`;
+  wrapperEle.appendChild(averagePricesEle);
+}
+
+avgPrices(freelancers);
+
+function availableFreelancer(fl) {
+  const freelancersWrapperEle = document.createElement("div");
+  const freelancersTitleEle = document.createElement("h1");
+  freelancersTitleEle.innerHTML = "Available Freelancers";
+
+  const freelancerTable = document.createElement("div");
+  const titlesEle = document.createElement("div");
+  titlesEle.style.display = "flex";
+  titlesEle.style.justifyContent = "space-around";
+  let titles = "";
+
+  for (let prop in fl[0]) {
+    titles = titles + `<h1>${prop}</h1>`;
+  }
+
+  titlesEle.innerHTML = titles;
+  freelancerTable.appendChild(titlesEle);
+
+  fl.forEach((i) => {
+    const row = document.createElement("div");
+    row.style.display = "flex";
+    row.style.justifyContent = "space-around";
+    let info = "";
+    for (let p in fl[0]) {
+      info = info + `<h1>${i[p]}</h1>`;
+    }
+    row.innerHTML = info;
+    freelancerTable.appendChild(row);
+  });
+
+  freelancersWrapperEle.appendChild(freelancersTitleEle);
+  freelancersWrapperEle.appendChild(freelancerTable);
+
+  wrapperEle.appendChild(freelancersWrapperEle);
+}
+
+availableFreelancer(freelancers);
